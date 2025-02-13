@@ -8,7 +8,7 @@ app = Flask(__name__)
 USER_TOKEN = os.getenv("DISCORD_USER_TOKEN")  # ✅ Using User Token instead of Bot Token
 GUILD_ID = os.getenv("GUILD_ID")  # Your Discord Server ID
 CHANNEL_ID = os.getenv("CHANNEL_ID")  # MidJourney's Channel ID in your server
-APPLICATION_ID = "&1193694002684362874"  # ✅ MidJourney's Official App ID
+APPLICATION_ID = "936929561302675456"  # ✅ MidJourney's Official App ID
 
 def send_imagine_command(prompt):
     url = "https://discord.com/api/v10/interactions"
