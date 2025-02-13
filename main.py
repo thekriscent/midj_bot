@@ -6,10 +6,10 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 # Load Environment Variables from Railway
-USER_TOKEN = os.getenv("DISCORD_USER_TOKEN")  # ✅ Using User Token
-GUILD_ID = os.getenv("GUILD_ID")  # Your Discord Server ID
-CHANNEL_ID = os.getenv("CHANNEL_ID")  # MidJourney's Channel ID in your server
-APPLICATION_ID = "936929561302675456"  # ✅ Correct MidJourney Application ID
+USER_TOKEN = os.getenv("DISCORD_USER_TOKEN")  # ✅ Your Discord User Token
+GUILD_ID = os.getenv("GUILD_ID")  # ✅ Your Discord Server ID
+CHANNEL_ID = os.getenv("CHANNEL_ID")  # ✅ MidJourney's Channel ID in your server
+APPLICATION_ID = "936929561302675456"  # ✅ MidJourney's Correct Application ID
 COMMAND_ID = "938956540159881230"  # ✅ Correct MidJourney `/imagine` command ID
 SESSION_ID = "1f7a2f96d5880b25f582d89995a73d80"  # ✅ Captured from payload
 VERSION = "1237876415471554623"  # ✅ Captured from payload
@@ -17,11 +17,11 @@ VERSION = "1237876415471554623"  # ✅ Captured from payload
 def send_imagine_command(prompt):
     url = "https://discord.com/api/v10/interactions"
     headers = {
-        "Authorization": f"{USER_TOKEN}",
+        "Authorization": f"{USER_TOKEN}",  # ✅ Using User Token
         "Content-Type": "application/json"
     }
     data = {
-        "type": 2,  # Slash command interaction
+        "type": 2,
         "application_id": APPLICATION_ID,
         "guild_id": GUILD_ID,
         "channel_id": CHANNEL_ID,
@@ -64,16 +64,28 @@ def send_imagine_command(prompt):
         "analytics_location": "slash_ui"
     }
 
+    # Send the API request
     response = requests.post(url, headers=headers, json=data)
-    return response.json()
+
+    # Debugging output
+    print("Response Status Code:", response.status_code)
+    print("Response Text:", response.text)
+
+    # Handle JSON response properly
+    try:
+        return response.json()
+    except requests.exceptions.JSONDecodeError:
+        return {"error": "Failed to decode JSON", "response_text": response.text}
 
 @app.route("/", methods=["POST"])
 def process_request():
     data = request.get_json()
+    
     if not data or "prompt" not in data:
         return jsonify({"error": "Invalid request, missing 'prompt'"}), 400
     
     response = send_imagine_command(data["prompt"])
+    
     return jsonify(response), 200
 
 @app.route("/", methods=["GET"])
@@ -81,4 +93,4 @@ def welcome():
     return jsonify({"message": "MidJourney Slash Command Automation Running"}), 200
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8080, debug=True)
