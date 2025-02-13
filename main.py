@@ -5,16 +5,24 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
-CHANNEL_ID = "1193570220695093330"  # Replace with your actual Discord channel ID
+CHANNEL_ID = "1193570220695093330"  # Replace with your MidJourney Discord channel ID
+APPLICATION_ID = "YOUR_MIDJOURNEY_APP_ID"  # Replace with MidJourney's Discord App ID
 
-def send_message(prompt):
-    url = f"https://discord.com/api/v10/channels/{CHANNEL_ID}/messages"
+def send_slash_command(prompt):
+    url = f"https://discord.com/api/v10/interactions"
     headers = {
         "Authorization": f"Bot {DISCORD_TOKEN}",
         "Content-Type": "application/json"
     }
     data = {
-        "content": f"/imagine prompt: {prompt}"
+        "type": 2,  # Slash command interaction
+        "application_id": APPLICATION_ID,
+        "guild_id": "YOUR_SERVER_ID",  # Replace with your Discord Server ID
+        "channel_id": CHANNEL_ID,
+        "data": {
+            "name": "imagine",
+            "options": [{"name": "prompt", "value": prompt}]
+        }
     }
 
     response = requests.post(url, headers=headers, json=data)
@@ -27,7 +35,7 @@ def process_request():
     if not data or "prompt" not in data:
         return jsonify({"error": "Invalid request, missing 'prompt'"}), 400
     
-    response = send_message(data["prompt"])
+    response = send_slash_command(data["prompt"])
     return jsonify(response), 200
 
 @app.route("/", methods=["GET"])
