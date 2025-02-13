@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
-CHANNEL_ID = "1193570220695093330"  # Replace with your Discord channel ID
+CHANNEL_ID = "1193570220695093330"  # Replace with your actual Discord channel ID
 
 def send_message(prompt):
     url = f"https://discord.com/api/v10/channels/{CHANNEL_ID}/messages"
@@ -18,6 +18,7 @@ def send_message(prompt):
     }
 
     response = requests.post(url, headers=headers, json=data)
+    print("Discord API Response:", response.status_code, response.text)  # Debugging line
     return response.json()
 
 @app.route("/", methods=["POST"])
@@ -35,4 +36,3 @@ def welcome():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
-
