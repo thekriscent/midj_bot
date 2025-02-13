@@ -4,29 +4,21 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
-CHANNEL_ID = "1193570220695093330"  # Replace with your MidJourney Discord channel ID
-APPLICATION_ID = "1193694002684362874"  # Replace with MidJourney's Discord App ID
+# Use your User Token from Railway variables
+USER_TOKEN = os.getenv("DISCORD_USER_TOKEN")  
+CHANNEL_ID = "1193694002684362874"  # Replace with your MidJourney channel ID
 
-def send_slash_command(prompt):
-    url = f"https://discord.com/api/v10/interactions"
+def send_message(prompt):
+    url = f"https://discord.com/api/v10/channels/{CHANNEL_ID}/messages"
     headers = {
-        "Authorization": f"Bot {DISCORD_TOKEN}",
+        "Authorization": f"{USER_TOKEN}",  # Uses your User Token
         "Content-Type": "application/json"
     }
     data = {
-        "type": 2,  # Slash command interaction
-        "application_id": APPLICATION_ID,
-        "guild_id": "1193570219977887846",  # Replace with your Discord Server ID
-        "channel_id": CHANNEL_ID,
-        "data": {
-            "name": "imagine",
-            "options": [{"name": "prompt", "value": prompt}]
-        }
+        "content": f"/imagine prompt: {prompt}"
     }
 
     response = requests.post(url, headers=headers, json=data)
-    print("Discord API Response:", response.status_code, response.text)  # Debugging line
     return response.json()
 
 @app.route("/", methods=["POST"])
@@ -35,12 +27,12 @@ def process_request():
     if not data or "prompt" not in data:
         return jsonify({"error": "Invalid request, missing 'prompt'"}), 400
     
-    response = send_slash_command(data["prompt"])
+    response = send_message(data["prompt"])
     return jsonify(response), 200
 
 @app.route("/", methods=["GET"])
 def welcome():
-    return jsonify({"message": "Discord Bot Running"}), 200
+    return jsonify({"message": "Discord User Automation Running"}), 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
