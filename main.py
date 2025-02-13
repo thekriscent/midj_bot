@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Use your User Token from Railway variables
 USER_TOKEN = os.getenv("DISCORD_USER_TOKEN")  
-CHANNEL_ID = "1193694002684362874"  # Replace with your MidJourney channel ID
+CHANNEL_ID = "1193570220695093330"  # Replace with your MidJourney channel ID
 
 def send_message(prompt):
     url = f"https://discord.com/api/v10/channels/{CHANNEL_ID}/messages"
