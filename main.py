@@ -4,21 +4,21 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Fetch variables from Railway environment
-USER_TOKEN = os.getenv("DISCORD_USER_TOKEN")  # User token (must be stored securely)
-GUILD_ID = os.getenv("GUILD_ID")  # Your Discord server ID
-CHANNEL_ID = os.getenv("CHANNEL_ID")  # MidJourney's Discord channel ID
-APPLICATION_ID = "1193694002684362874"  # MidJourney's Application ID (fixed)
+# Load Environment Variables from Railway
+USER_TOKEN = os.getenv("DISCORD_USER_TOKEN")  # Your personal Discord User Token
+GUILD_ID = os.getenv("GUILD_ID")  # Your Discord Server ID
+CHANNEL_ID = os.getenv("CHANNEL_ID")  # MidJourney's Channel ID in your server
+APPLICATION_ID = "1193694002684362874"  # ✅ Correct MidJourney Application ID
 
 def send_imagine_command(prompt):
     url = "https://discord.com/api/v10/interactions"
     headers = {
-        "Authorization": f"{USER_TOKEN}",
+        "Authorization": f"Bot {USER_TOKEN}",  # ✅ Using Bot Token
         "Content-Type": "application/json"
     }
     data = {
         "type": 2,  # Slash command interaction
-        "application_id": APPLICATION_ID,
+        "application_id": APPLICATION_ID,  # ✅ Correct MidJourney Application ID
         "guild_id": GUILD_ID,
         "channel_id": CHANNEL_ID,
         "data": {
@@ -48,7 +48,7 @@ def process_request():
 
 @app.route("/", methods=["GET"])
 def welcome():
-    return jsonify({"message": "Discord MidJourney Automation Running"}), 200
+    return jsonify({"message": "MidJourney Slash Command Automation Running"}), 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
