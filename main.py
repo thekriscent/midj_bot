@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = "1193570220695093330"  # Replace with your MidJourney Discord channel ID
-APPLICATION_ID = "YOUR_MIDJOURNEY_APP_ID"  # Replace with MidJourney's Discord App ID
+APPLICATION_ID = "1193694002684362874"  # Replace with MidJourney's Discord App ID
 
 def send_slash_command(prompt):
     url = f"https://discord.com/api/v10/interactions"
@@ -17,7 +17,7 @@ def send_slash_command(prompt):
     data = {
         "type": 2,  # Slash command interaction
         "application_id": APPLICATION_ID,
-        "guild_id": "YOUR_SERVER_ID",  # Replace with your Discord Server ID
+        "guild_id": "1193570219977887846",  # Replace with your Discord Server ID
         "channel_id": CHANNEL_ID,
         "data": {
             "name": "imagine",
