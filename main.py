@@ -4,13 +4,13 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-DISCORD_TOKEN = os.getenv("MTMzOTQxMzA4MDI0OTA3Mzc1Ng.GPHjiA.BcxSc-nDHR54ZL1idVsv0hI-8GdCp3RQpOd-kM")
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = "1193570220695093330"  # Replace with your Discord channel ID
 
 def send_message(prompt):
-    url = f"https://discord.com/api/v10/channels/1193570220695093330/messages"
+    url = f"https://discord.com/api/v10/channels/{CHANNEL_ID}/messages"
     headers = {
-        "Authorization": f"Bot {MTMzOTQxMzA4MDI0OTA3Mzc1Ng.GPHjiA.BcxSc-nDHR54ZL1idVsv0hI-8GdCp3RQpOd-kM}",
+        "Authorization": f"Bot {DISCORD_TOKEN}",
         "Content-Type": "application/json"
     }
     data = {
@@ -35,3 +35,4 @@ def welcome():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
+
