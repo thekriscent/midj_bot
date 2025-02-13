@@ -4,21 +4,21 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Load environment variables from Railway
-BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")  # Your bot's token
+# Load Environment Variables from Railway
+USER_TOKEN = os.getenv("DISCORD_USER_TOKEN")  # ✅ Using User Token instead of Bot Token
 GUILD_ID = os.getenv("GUILD_ID")  # Your Discord Server ID
-CHANNEL_ID = os.getenv("CHANNEL_ID")  # MidJourney's Discord channel ID
-MIDJOURNEY_APP_ID = "1193694002684362874"  # MidJourney's official App ID
+CHANNEL_ID = os.getenv("CHANNEL_ID")  # MidJourney's Channel ID in your server
+APPLICATION_ID = "1193694002684362874"  # ✅ MidJourney's Official App ID
 
 def send_imagine_command(prompt):
     url = "https://discord.com/api/v10/interactions"
     headers = {
-        "Authorization": f"Bot {BOT_TOKEN}",  # ✅ Using Your Bot's Token
+        "Authorization": f"{USER_TOKEN}",  # ✅ Using User Token
         "Content-Type": "application/json"
     }
     data = {
         "type": 2,  # Slash command interaction
-        "application_id": MIDJOURNEY_APP_ID,  # ✅ MidJourney's App ID
+        "application_id": APPLICATION_ID,  # ✅ MidJourney's App ID
         "guild_id": GUILD_ID,
         "channel_id": CHANNEL_ID,
         "data": {
